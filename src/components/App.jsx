@@ -27,6 +27,17 @@ export class App extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    const { name, contacts } = this.state;
+
+    const isExist = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (isExist) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+
     const newContact = {
       name: this.state.name,
       number: this.state.number,
