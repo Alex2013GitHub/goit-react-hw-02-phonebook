@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import './App.css';
+import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
+import { ContactList } from './ContactList/ContactList';
+import { Container } from './Container/Container.styled';
 
 export class App extends Component {
   state = {
@@ -62,59 +65,19 @@ export class App extends Component {
       contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
     );
     return (
-      <div className="container">
+      <Container>
         <h1>Phonebook</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              required
-              value={this.state.name}
-              onChange={this.handleChange}
-              placeholder="Enter contact name"
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="tel"
-              name="number"
-              required
-              value={this.state.number}
-              onChange={this.handleChange}
-            />
-          </label>
-        </form>
-        <button type="submit" onClick={this.handleSubmit}>
-          Add contact
-        </button>
-        <label>
-          {' '}
-          Find contacts by name
-          <input
-            type="text"
-            placeholder="Search contacts..."
-            value={this.state.filter}
-            onChange={this.handleFilterChange}
-          />
-        </label>
+        <ContactForm
+          onSubmit={this.handleSubmit}
+          name={this.state.name}
+          number={this.state.number}
+          onChange={this.handleChange}
+        />
 
-        <h2>Сontacts</h2>
-        <ul>
-          {filteredContacts.map(contact => (
-            <li key={contact.id} className="contact-item">
-              <span className="contact-info">
-                {contact.name}: {contact.number}
-              </span>
-              <button onClick={() => this.handleDelete(contact.id)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <h2>Contacts</h2>
+        <Filter value={this.state.filter} onChange={this.handleFilterChange} />
+        <ContactList contacts={filteredContacts} onDelete={this.handleDelete} />
+      </Container>
     );
   }
 }
