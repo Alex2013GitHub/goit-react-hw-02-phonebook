@@ -14,44 +14,32 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleFilterChange = e => {
-    this.setState({ filter: e.target.value });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-
-    const { name, contacts } = this.state;
-
+  handleContactSubmit = ({ name, number }) => {
+    const { contacts } = this.state;
     const isExist = contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
     if (isExist) {
-      alert(`${name} is already in contacts.`);
+      alert(`${name} вже є у контактах.`);
       return;
     }
 
     const newContact = {
-      name: this.state.name,
-      number: this.state.number,
+      name: name,
+      number: number,
       id: nanoid(),
     };
 
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
-      name: '',
-      number: '',
     }));
+  };
+
+  handleFilterChange = e => {
+    this.setState({ filter: e.target.value });
   };
 
   handleDelete = contactId => {
@@ -67,13 +55,7 @@ export class App extends Component {
     return (
       <Container>
         <h1>Phonebook</h1>
-        <ContactForm
-          onSubmit={this.handleSubmit}
-          name={this.state.name}
-          number={this.state.number}
-          onChange={this.handleChange}
-        />
-
+        <ContactForm onContactSubmit={this.handleContactSubmit} />
         <h2>Contacts</h2>
         <Filter value={this.state.filter} onChange={this.handleFilterChange} />
         <ContactList contacts={filteredContacts} onDelete={this.handleDelete} />
